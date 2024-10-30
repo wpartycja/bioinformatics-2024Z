@@ -100,14 +100,6 @@ class Matrix(ABC):
         Perform traceback to get the optimal alignment (to be implemented by derived classes).
         """
         pass
-    
-    @abstractmethod
-    def calculate_alignment_score(self):
-        """
-        Calculate the final alignment score based on the bottom-right cell of the matrix.
-        :return: Final alignment score.
-        """
-        pass
 
     def print_matrix(self):
         """

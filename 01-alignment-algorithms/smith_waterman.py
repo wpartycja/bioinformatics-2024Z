@@ -3,7 +3,7 @@ from matrix import Matrix
 
 class SmithWaterman(Matrix):
     """
-    Class that implements the Smith-Waterman algorithm (local alignment).
+    local alignment
     """
 
     def fill_matrix(self):
@@ -45,23 +45,4 @@ class SmithWaterman(Matrix):
 
         x, y = max_x, max_y
 
-        return self.traceback_algortihm(x, y, "sw")
-
-
-    def calculate_alignment_score(self) -> int:
-        """
-        Calculate the highest alignment score in the matrix for local alignment.
-        
-        :return: The highest score found in the matrix, representing the optimal local alignment score.
-        """
-        if self.matrix is None:
-            self.perform_algorithm()  
-
-        # Find the maximum value in the matrix
-        max_value = 0
-        for row in self.matrix:
-            for cell in row:
-                if cell.value > max_value:
-                    max_value = cell.value
-
-        return max_value
+        return *self.traceback_algortihm(x, y, "sw"), max_value
