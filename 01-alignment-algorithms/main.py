@@ -10,13 +10,20 @@ if __name__ == "__main__":
     nw.print_matrix()
 
     print("\nAligned Sequences:")
-    print(alignment[0])
-    print(alignment[1])
-    
-    nw_score = nw.calculate_alignment_score()
-    
-    print(f"Caluclated score: {nw_score}")
+    print(alignment)
 
+    print("\n\n")
+    
+    nw = NeedlemanWunsch("TATA", "ATAT", -1, 1, -1)
+    alignment = nw.perform_algorithm()
+    nw.print_matrix()
+
+    print("\nAligned Sequences:")
+    print(alignment)
+    
+
+    print("\n\n")
+    
     # Smith-Waterman alignment
     print("\n\n----- Smith-Waterman -----\n")
 
@@ -25,9 +32,14 @@ if __name__ == "__main__":
     sw.print_matrix()
 
     print("\nAligned Sequences:")
-    print(alignment_sw[0])
-    print(alignment_sw[1])
+    print(alignment_sw)
     
-    sw_score = sw.calculate_alignment_score()
+    print("\n\n")
     
-    print(f"Caluclated score: {sw_score}")
+    sw = SmithWaterman("TATA", "ATAT", -1, 1, -1)
+    alignment = sw.perform_algorithm()
+    sw.print_matrix()
+
+    print("\nAligned Sequences:")
+    print(alignment)
+
