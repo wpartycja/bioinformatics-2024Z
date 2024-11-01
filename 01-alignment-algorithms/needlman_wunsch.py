@@ -1,9 +1,8 @@
 from matrix import Matrix
 
-
 class NeedlemanWunsch(Matrix):
     """
-    For **global** alignment
+    For **global** alignment using the Needleman-Wunsch algorithm.
     """
 
     def initialize_matrix(self):
@@ -52,10 +51,13 @@ class NeedlemanWunsch(Matrix):
         x, y = len(self.sequence1), len(self.sequence2)
         self._traceback_recursive(x, y, [], [], alignments)
         
-        # Format the output with scores
+        curr_n = 0
         final_alignments = []
         for aligned_seq1, aligned_seq2 in alignments:
+            if curr_n == self.n:
+                break
             final_alignments.append((aligned_seq1, aligned_seq2, self.matrix[len(self.sequence1)][len(self.sequence2)].value))
+            curr_n += 1
         
         return final_alignments
 

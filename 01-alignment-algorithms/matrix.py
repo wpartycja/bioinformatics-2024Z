@@ -1,6 +1,10 @@
 from cell import Cell
 from abc import ABC, abstractmethod
 from tabulate import tabulate
+import csv
+import os
+
+OUTPUT_PATH = './output'
 
 
 class Matrix(ABC):
@@ -12,32 +16,61 @@ class Matrix(ABC):
         self,
         sequence1: str,
         sequence2: str,
-        gap_penalty: int,
-        match_score: int,
-        mismatch_penalty: int,
+        n: int,
+        filepath: str,
+        gap_penalty: int = -2,
+        output_filename: str = None
     ):
         """
         Initializes the base matrix for alignment algorithms.
 
         :param sequence1: the first sequence (column)
         :param sequence2: the second sequence (row)
-        :param gap_penalty: penalty for introducing gaps in the alignment
-        :param match_score: score for matching characters
-        :param mismatch_penalty: penalty for mismatching characters
+        :param n: maximum number of optimal alignments
+        :param filepath: filepath to the substitution matrix in CSV format
+        :param gap_penalty: penalty for introducing gaps in the alignment (default -2)
+        :param output_filename: name of the file to save the alignment output
         """
         self.sequence1 = sequence1
         self.sequence2 = sequence2
+        
+        self.n = 1 if self.__class__.__name__ == 'SmithWaterman' else n
         self.gap_penalty = gap_penalty
-        self.match_score = match_score
-        self.mismatch_penalty = mismatch_penalty
+        
+        if not os.path.exists(OUTPUT_PATH):
+            os.makedirs(OUTPUT_PATH)
+        
+        self.output_filename = output_filename if output_filename else f"{OUTPUT_PATH}/{self.__class__.__name__.lower()}_{self.sequence1}_{self.sequence2}.txt"
+        self.substitution_matrix = self.load_matrix(filepath)
 
         self.matrix = None
+
+    @staticmethod
+    def load_matrix(path: str) -> dict:
+        """
+        Loads a substitution matrix that includes match, mismatch, and gap penalties from a CSV file.
+
+        Parameters:
+            - path (str): filepath to the substitution matrix in CSV format
+
+        Returns:
+            - matrix_ (dict): substitution matrix in a form of a nested dictionary where each key is a nucleotide,
+              and each value is a dictionary mapping other nucleotides to their scores.
+        """
+        matrix_ = {}
+        with open(path, 'r') as file:
+            r = csv.reader(file)
+            nucleotides1 = [header.strip() for header in next(r)[1:]]
+            for row in r:
+                nucleotide = row[0].strip()
+                values = list(map(int, [x.strip() for x in row[1:]]))
+                matrix_[nucleotide] = dict(zip(nucleotides1, values))
+        return matrix_
 
     def initialize_matrix(self):
         """
         Initialize the matrix with proper values (to be implemented by derived classes).
         """
-
         # Create a matrix with an extra row and column for the initial gaps
         self.matrix = [
             [Cell() for _ in range(len(self.sequence2) + 1)]
@@ -45,15 +78,27 @@ class Matrix(ABC):
         ]
 
     def get_scores(self, x: int, y: int) -> list[int]:
-        if self.sequence1[x - 1] == self.sequence2[y - 1]:
-            score_diagonal = self.matrix[x - 1][y - 1].value + self.match_score
-        else:
-            score_diagonal = self.matrix[x - 1][y - 1].value + self.mismatch_penalty
+        """
+        Computes the scores for the cell at position (x, y) based on the substitution matrix.
 
+        :param x: Row index in the scoring matrix (for sequence1)
+        :param y: Column index in the scoring matrix (for sequence2)
+        :return: A list containing the scores for up, diagonal, and left moves.
+        """
+        # Score for the diagonal move using the substitution matrix
+        score_diagonal = (
+            self.matrix[x - 1][y - 1].value +
+            self.substitution_matrix[self.sequence1[x - 1]].get(self.sequence2[y - 1], self.gap_penalty)
+        )
+
+        # Score for the up move
         score_up = self.matrix[x - 1][y].value + self.gap_penalty
+
+        # Score for the left move
         score_left = self.matrix[x][y - 1].value + self.gap_penalty
 
         return score_up, score_diagonal, score_left
+
 
     @abstractmethod
     def fill_matrix(self):
@@ -62,7 +107,7 @@ class Matrix(ABC):
         """
         pass
 
-    def traceback_algortihm(self, x, y, alg) -> list[str]:
+    def traceback_algorithm(self, x, y, alg) -> list[str]:
         aligned_sequence1 = []
         aligned_sequence2 = []
 
@@ -71,7 +116,7 @@ class Matrix(ABC):
         elif alg == "sw":
             condition = lambda x, y: x > 0 and y > 0 and self.matrix[x][y].value > 0
         else:
-            ValueError("Invalid algorithm name for traceback!")
+            raise ValueError("Invalid algorithm name for traceback!")
 
         while condition(x, y):
             if self.matrix[x][y].max_from == "diagonal":
@@ -127,4 +172,23 @@ class Matrix(ABC):
         """
         self.initialize_matrix()
         self.fill_matrix()
-        return self.traceback()
+        alignments = self.traceback()
+        self.save_output(alignments)
+        
+        return alignments
+        
+
+    def save_output(self, alignments):
+        """
+        Save the formatted output of the alignments to a file.
+        """
+        try:
+            with open(self.output_filename, 'w') as f:
+                for idx, (seq1, seq2, score) in enumerate(alignments):
+                    f.write(f"Global alignment no. {idx + 1}:\n")
+                    f.write(f"{seq1}\n")
+                    f.write(f"{seq2}\n")
+                    f.write(f"Score: {score}\n\n")
+            print(f"Alignments saved successfully to {self.output_filename}.")
+        except Exception as e:
+            print(f"An error occurred while saving the alignments: {e}")

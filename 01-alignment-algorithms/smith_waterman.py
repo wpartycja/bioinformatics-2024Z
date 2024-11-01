@@ -45,4 +45,4 @@ class SmithWaterman(Matrix):
 
         x, y = max_x, max_y
 
-        return *self.traceback_algortihm(x, y, "sw"), max_value
+        return [[*self.traceback_algorithm(x, y, "sw"), max_value]]
