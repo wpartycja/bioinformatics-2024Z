@@ -1,45 +1,64 @@
 from needlman_wunsch import NeedlemanWunsch
 from smith_waterman import SmithWaterman
 
+
 if __name__ == "__main__":
-    # Needlaman Wunsch alignment
+    # Needleman-Wunsch alignment
     print("----- Needleman Wunsch -----\n")
 
-    nw = NeedlemanWunsch("TTCATA", "TGCTCGTA", -6, 5, -2)
+    # Example 1
+    substitution_matrix_file = "./example_matrix.csv" 
+    nw = NeedlemanWunsch("TTCATA", "TGCTCGTA", 3, substitution_matrix_file)
     alignment = nw.perform_algorithm()
     nw.print_matrix()
 
     print("\nAligned Sequences:")
-    print(alignment)
-
+    for seq1, seq2, score in alignment:
+        print(f"Score: {score}")
+        print(f"Sequence 1: {seq1}")
+        print(f"Sequence 2: {seq2}")
+    
     print("\n\n")
     
-    nw = NeedlemanWunsch("TATA", "ATAT", -1, 1, -1)
+    # Example 2
+    nw = NeedlemanWunsch("TATA", "ATAT", 2, substitution_matrix_file)
     alignment = nw.perform_algorithm()
     nw.print_matrix()
 
     print("\nAligned Sequences:")
-    print(alignment)
+    for seq1, seq2, score in alignment:
+        print(f"Score: {score}")
+        print(f"Sequence 1: {seq1}")
+        print(f"Sequence 2: {seq2}")
     
-
     print("\n\n")
+
     
     # Smith-Waterman alignment
-    print("\n\n----- Smith-Waterman -----\n")
+    print("----- Smith-Waterman -----\n")
 
-    sw = SmithWaterman("TTCATA", "TGCTCGTA", -6, 5, -2)
-    alignment_sw = sw.perform_algorithm()
-    sw.print_matrix()
-
-    print("\nAligned Sequences:")
-    print(alignment_sw)
-    
-    print("\n\n")
-    
-    sw = SmithWaterman("TATA", "ATAT", -1, 1, -1)
+    sw = SmithWaterman("TTCATA", "TGCTCGTA", 1, "./example_matrix.csv")
     alignment = sw.perform_algorithm()
-    sw.print_matrix()
-
-    print("\nAligned Sequences:")
+    sw.print_matrix() 
+    
     print(alignment)
 
+    print("\nAligned Sequences:")
+    for seq1, seq2, score in alignment:
+        print(f"Score: {score}")
+        print(f"Sequence 1: {seq1}")
+        print(f"Sequence 2: {seq2}")
+
+    print("\n\n")
+
+    sw = SmithWaterman("TATA", "ATAT", 1, "example_matrix.csv")
+    alignment = sw.perform_algorithm()
+    sw.print_matrix()  # Print the matrix and save alignments to file
+
+    print("\nAligned Sequences:")
+    for seq1, seq2, score in alignment:
+        print(f"Score: {score}")
+        print(f"Sequence 1: {seq1}")
+        print(f"Sequence 2: {seq2}")
+
+    print("\n\n")
