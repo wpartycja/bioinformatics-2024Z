@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     # Example 1
     substitution_matrix_file = "./example_matrix.csv" 
-    nw = NeedlemanWunsch("TTCATA", "TGCTCGTA", 3, substitution_matrix_file)
+    nw = NeedlemanWunsch("TTCA", "TGCTCG", 3, substitution_matrix_file)
     alignment = nw.perform_algorithm()
     nw.print_matrix()
 
@@ -37,6 +37,7 @@ if __name__ == "__main__":
     # Smith-Waterman alignment
     print("----- Smith-Waterman -----\n")
 
+    # Example 1
     sw = SmithWaterman("TTCATA", "TGCTCGTA", 1, "./example_matrix.csv")
     alignment = sw.perform_algorithm()
     sw.print_matrix() 
@@ -51,9 +52,11 @@ if __name__ == "__main__":
 
     print("\n\n")
 
+
+    # Example 2
     sw = SmithWaterman("TATA", "ATAT", 1, "example_matrix.csv")
     alignment = sw.perform_algorithm()
-    sw.print_matrix()  # Print the matrix and save alignments to file
+    sw.print_matrix()  
 
     print("\nAligned Sequences:")
     for seq1, seq2, score in alignment:

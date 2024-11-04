@@ -11,12 +11,10 @@ class NeedlemanWunsch(Matrix):
         """
         super().initialize_matrix()
 
-        # Initialize first column (gap in sequence1)
         for row in range(1, len(self.sequence1) + 1):
             self.matrix[row][0].value = self.gap_penalty * row
             self.matrix[row][0].max_from = ["up"]
 
-        # Initialize first row (gap in sequence2)
         for column in range(1, len(self.sequence2) + 1):
             self.matrix[0][column].value = self.gap_penalty * column
             self.matrix[0][column].max_from = ["left"]
@@ -65,12 +63,10 @@ class NeedlemanWunsch(Matrix):
         """
         Helper method to recursively explore all paths in traceback.
         """
-        # Base case: reach the top-left corner
         if x == 0 and y == 0:
             alignments.append((''.join(reversed(aligned_seq1)), ''.join(reversed(aligned_seq2))))
             return
         
-        # Recursive cases: explore all possible directions
         if "diagonal" in self.matrix[x][y].max_from:
             self._traceback_recursive(x - 1, y - 1, aligned_seq1 + [self.sequence1[x - 1]], aligned_seq2 + [self.sequence2[y - 1]], alignments)
         
