@@ -34,7 +34,6 @@ class SmithWaterman(Matrix):
         Perform the traceback to get the optimal alignment for Smith-Waterman (local alignment).
         """
 
-        # Find the cell with the highest score for local alignment
         max_x, max_y = 0, 0
         max_value = 0
         for x in range(1, len(self.sequence1) + 1):
