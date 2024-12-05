@@ -11,16 +11,21 @@ import random
 
 # general part
 
+
 def translate_records(file_path: str) -> list:
     records = list(SeqIO.parse(file_path, "fasta"))
-    
+
     translated_records = []
     for record in records:
-        normalized_seq = record.seq.upper()# .replace('N', '') #.replace('X', '') # @TODO: ?
-        translated_seq =  normalized_seq.translate(to_stop=True)
+        normalized_seq = (
+            record.seq.upper()
+        )  # .replace('N', '') #.replace('X', '') # @TODO: ?
+        translated_seq = normalized_seq.translate(to_stop=True)
         if len(translated_seq) == 0:
             continue
-        translated_records.append(SeqRecord(normalized_seq, id=record.id, description=record.description))
+        translated_records.append(
+            SeqRecord(normalized_seq, id=record.id, description=record.description)
+        )
 
     return translated_records
 
@@ -30,13 +35,17 @@ def extract_experiments(file_path: str) -> tuple[pd.DataFrame]:
     experiments_df = experiments_df[["curation_status", "coordinate_hg38", "seq_hg38"]]
     experiments_df.dropna(inplace=True)
     experiments_df["seq_hg38"] = experiments_df["seq_hg38"].str.upper()
-    
+
     positive_df = experiments_df[experiments_df["curation_status"] == "positive"]
-    negative_df_v1 = experiments_df[experiments_df["curation_status"] == "negative"][["curation_status", "coordinate_hg38", "seq_hg38"]]
-    
+    negative_df_v1 = experiments_df[experiments_df["curation_status"] == "negative"][
+        ["curation_status", "coordinate_hg38", "seq_hg38"]
+    ]
+
     return experiments_df, positive_df, negative_df_v1
 
+
 # Get random negatives
+
 
 def parse_coordinates(coord: str) -> tuple[str]:
     chrom, positions = coord.split(":")
@@ -44,7 +53,9 @@ def parse_coordinates(coord: str) -> tuple[str]:
     return chrom, start, end
 
 
-def generate_random_regions(num_regions: int, lengths: int, chrom_sizes: int, positive_regions: int) -> list:
+def generate_random_regions(
+    num_regions: int, lengths: int, chrom_sizes: int, positive_regions: int
+) -> list:
     negative_regions = []
     positive_intervals = {(chrom, start, end) for chrom, start, end in positive_regions}
 
@@ -76,7 +87,7 @@ def extract_sequences(parsed_genome, regions):
     for chrom, start, end in regions:
         seq = chrom_dict[chrom][start:end]
         seq_set = set(seq)
-        if seq_set == set('X'):
+        if seq_set == set("X"):
             continue
         sequences.append((chrom, start, end, str(seq)))
     return sequences
@@ -87,13 +98,15 @@ def generate_random_negatives(parsed_genome, positive_df):
 
     positive_regions = []
     for coord in positive_df["coordinate_hg38"]:
-        if coord in set(['na', 'nan', np.nan]):
+        if coord in set(["na", "nan", np.nan]):
             continue
         chrom, start, end = parse_coordinates(coord)
         positive_regions.append((chrom, start, end))
-        
+
     positive_lengths = [end - start for _, start, end in positive_regions]
-    negative_regions = generate_random_regions(len(positive_lengths), positive_lengths, chrom_sizes, positive_regions)
+    negative_regions = generate_random_regions(
+        len(positive_lengths), positive_lengths, chrom_sizes, positive_regions
+    )
 
     negative_sequences = extract_sequences(parsed_genome, negative_regions)
 
@@ -102,7 +115,9 @@ def generate_random_negatives(parsed_genome, positive_df):
 
     to_df = []
     for chrom, start, end, seq in filtered_negatives:
-        to_df.append(('negative', f'{chrom}:{start}-{end}', seq))
+        to_df.append(("negative", f"{chrom}:{start}-{end}", seq))
 
-    negative_df_v2 = pd.DataFrame(to_df, columns=['curation_status', 'coordinate_hg38',	'seq_hg38'])
+    negative_df_v2 = pd.DataFrame(
+        to_df, columns=["curation_status", "coordinate_hg38", "seq_hg38"]
+    )
     return negative_df_v2
