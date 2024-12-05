@@ -5,3 +5,6 @@
 clustalw-2.1/
 */output
 */translated_records.*
+*/data
+*/train_data
+*/test_data
