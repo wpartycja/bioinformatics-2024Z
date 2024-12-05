@@ -5,25 +5,32 @@ import xgboost as xgb
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.model_selection import StratifiedKFold, cross_val_score
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    confusion_matrix,
+)
 from sklearn.preprocessing import LabelEncoder
-
 
 
 def percentage_conf_matrix(y_true, y_pred):
     cm = confusion_matrix(y_true, y_pred)
-    cm_percentage = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] * 100
+    cm_percentage = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis] * 100
     return cm_percentage
 
+
 def get_results(train_data, test_data1, test_data2, model):
-    X_train = train_data.drop(columns=['curation_status'])
-    y_train = train_data['curation_status']
+    X_train = train_data.drop(columns=["curation_status"])
+    y_train = train_data["curation_status"]
 
-    X_test1 = test_data1.drop(columns=['curation_status'])
-    y_test1 = test_data1['curation_status']
+    X_test1 = test_data1.drop(columns=["curation_status"])
+    y_test1 = test_data1["curation_status"]
 
-    X_test2 = test_data2.drop(columns=['curation_status'])
-    y_test2 = test_data2['curation_status']
+    X_test2 = test_data2.drop(columns=["curation_status"])
+    y_test2 = test_data2["curation_status"]
 
     # Align test data with training features
     X_test_aligned1 = X_test1[X_train.columns]
@@ -47,7 +54,9 @@ def get_results(train_data, test_data1, test_data2, model):
     model = model()
 
     cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
-    cv_scores = cross_val_score(model, X_train, y_train_encoded, cv=cv, scoring='accuracy')
+    cv_scores = cross_val_score(
+        model, X_train, y_train_encoded, cv=cv, scoring="accuracy"
+    )
 
     model.fit(X_train, y_train_encoded)
 
@@ -55,24 +64,28 @@ def get_results(train_data, test_data1, test_data2, model):
     y_test_pred2 = model.predict(X_test_aligned2)
 
     test_accuracy1 = accuracy_score(y_test_encoded1, y_test_pred1)
-    test_precision1 = precision_score(y_test_encoded1, y_test_pred1, average='weighted')
-    test_recall1 = recall_score(y_test_encoded1, y_test_pred1, average='weighted')
-    test_f1_score1 = f1_score(y_test_encoded1, y_test_pred1, average='weighted')
-    
+    test_precision1 = precision_score(y_test_encoded1, y_test_pred1, average="weighted")
+    test_recall1 = recall_score(y_test_encoded1, y_test_pred1, average="weighted")
+    test_f1_score1 = f1_score(y_test_encoded1, y_test_pred1, average="weighted")
+
     if hasattr(model, "predict_proba"):
-        auc_roc1 = roc_auc_score(y_test_encoded1, model.predict_proba(X_test_aligned1)[:, 1])
+        auc_roc1 = roc_auc_score(
+            y_test_encoded1, model.predict_proba(X_test_aligned1)[:, 1]
+        )
     else:
         auc_roc1 = "N/A"
 
     conf_matrix1 = percentage_conf_matrix(y_test_encoded1, y_test_pred1)
 
     test_accuracy2 = accuracy_score(y_test_encoded2, y_test_pred2)
-    test_precision2 = precision_score(y_test_encoded2, y_test_pred2, average='weighted')
-    test_recall2 = recall_score(y_test_encoded2, y_test_pred2, average='weighted')
-    test_f1_score2 = f1_score(y_test_encoded2, y_test_pred2, average='weighted')
-    
+    test_precision2 = precision_score(y_test_encoded2, y_test_pred2, average="weighted")
+    test_recall2 = recall_score(y_test_encoded2, y_test_pred2, average="weighted")
+    test_f1_score2 = f1_score(y_test_encoded2, y_test_pred2, average="weighted")
+
     if hasattr(model, "predict_proba"):
-        auc_roc2 = roc_auc_score(y_test_encoded2, model.predict_proba(X_test_aligned2)[:, 1])
+        auc_roc2 = roc_auc_score(
+            y_test_encoded2, model.predict_proba(X_test_aligned2)[:, 1]
+        )
     else:
         auc_roc2 = "N/A"
 
@@ -96,7 +109,7 @@ def get_results(train_data, test_data1, test_data2, model):
             "F1-score": test_f1_score2,
             "AUC-ROC": auc_roc2,
             "Confusion Matrix": conf_matrix2.tolist(),
-        }
+        },
     }
 
     return results
