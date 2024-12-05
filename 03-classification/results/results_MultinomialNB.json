@@ -1,0 +1,258 @@
+{
+    "test_experiments": [
+        {
+            "k": 3,
+            "negative_data": "experiment",
+            "results": {
+                "cv_mean": 0.5807692307692308,
+                "Negatives from experiments": {
+                    "Accuracy": 0.51375,
+                    "Precision": 0.5447964814400033,
+                    "Recall": 0.51375,
+                    "F1-score": 0.411843639614372,
+                    "AUC-ROC": 0.564915625,
+                    "Confusion Matrix": [
+                        [
+                            9.75,
+                            90.25
+                        ],
+                        [
+                            7.000000000000001,
+                            93.0
+                        ]
+                    ]
+                },
+                "Random Negatives": {
+                    "cv_mean": 0.5807692307692308,
+                    "Accuracy": 0.725,
+                    "Precision": 0.770465200144248,
+                    "Recall": 0.725,
+                    "F1-score": 0.7129361413398052,
+                    "AUC-ROC": 0.84795625,
+                    "Confusion Matrix": [
+                        [
+                            52.0,
+                            48.0
+                        ],
+                        [
+                            7.000000000000001,
+                            93.0
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "k": 4,
+            "negative_data": "experiment",
+            "results": {
+                "cv_mean": 0.5988165680473372,
+                "Negatives from experiments": {
+                    "Accuracy": 0.52625,
+                    "Precision": 0.5416043427009143,
+                    "Recall": 0.52625,
+                    "F1-score": 0.47809712006692473,
+                    "AUC-ROC": 0.5883406250000001,
+                    "Confusion Matrix": [
+                        [
+                            22.25,
+                            77.75
+                        ],
+                        [
+                            17.0,
+                            83.0
+                        ]
+                    ]
+                },
+                "Random Negatives": {
+                    "cv_mean": 0.5988165680473372,
+                    "Accuracy": 0.6625,
+                    "Precision": 0.6830418743487934,
+                    "Recall": 0.6625,
+                    "F1-score": 0.6527576827362696,
+                    "AUC-ROC": 0.78355625,
+                    "Confusion Matrix": [
+                        [
+                            49.5,
+                            50.5
+                        ],
+                        [
+                            17.0,
+                            83.0
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "k": 5,
+            "negative_data": "experiment",
+            "results": {
+                "cv_mean": 0.6180473372781063,
+                "Negatives from experiments": {
+                    "Accuracy": 0.53375,
+                    "Precision": 0.546094356855682,
+                    "Recall": 0.53375,
+                    "F1-score": 0.500293895513865,
+                    "AUC-ROC": 0.57361875,
+                    "Confusion Matrix": [
+                        [
+                            27.500000000000004,
+                            72.5
+                        ],
+                        [
+                            20.75,
+                            79.25
+                        ]
+                    ]
+                },
+                "Random Negatives": {
+                    "cv_mean": 0.6180473372781063,
+                    "Accuracy": 0.75375,
+                    "Precision": 0.7552832952923496,
+                    "Recall": 0.75375,
+                    "F1-score": 0.7533796841820296,
+                    "AUC-ROC": 0.812978125,
+                    "Confusion Matrix": [
+                        [
+                            71.5,
+                            28.499999999999996
+                        ],
+                        [
+                            20.75,
+                            79.25
+                        ]
+                    ]
+                }
+            }
+        }
+    ],
+    "test_random_negatives": [
+        {
+            "k": 3,
+            "negative_data": "random",
+            "results": {
+                "cv_mean": 0.8266094088517486,
+                "Negatives from experiments": {
+                    "Accuracy": 0.52875,
+                    "Precision": 0.5489616927973092,
+                    "Recall": 0.52875,
+                    "F1-score": 0.4745196018475445,
+                    "AUC-ROC": 0.5735281249999999,
+                    "Confusion Matrix": [
+                        [
+                            20.75,
+                            79.25
+                        ],
+                        [
+                            15.0,
+                            85.0
+                        ]
+                    ]
+                },
+                "Random Negatives": {
+                    "cv_mean": 0.8266094088517486,
+                    "Accuracy": 0.80875,
+                    "Precision": 0.8108658305592439,
+                    "Recall": 0.80875,
+                    "F1-score": 0.808424021499082,
+                    "AUC-ROC": 0.8953093750000001,
+                    "Confusion Matrix": [
+                        [
+                            76.75,
+                            23.25
+                        ],
+                        [
+                            15.0,
+                            85.0
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "k": 4,
+            "negative_data": "random",
+            "results": {
+                "cv_mean": 0.8596711544413494,
+                "Negatives from experiments": {
+                    "Accuracy": 0.535,
+                    "Precision": 0.5552072242596318,
+                    "Recall": 0.535,
+                    "F1-score": 0.4881637875879718,
+                    "AUC-ROC": 0.573984375,
+                    "Confusion Matrix": [
+                        [
+                            23.25,
+                            76.75
+                        ],
+                        [
+                            16.25,
+                            83.75
+                        ]
+                    ]
+                },
+                "Random Negatives": {
+                    "cv_mean": 0.8596711544413494,
+                    "Accuracy": 0.82625,
+                    "Precision": 0.8264152477191579,
+                    "Recall": 0.82625,
+                    "F1-score": 0.8262280069821337,
+                    "AUC-ROC": 0.9120562499999999,
+                    "Confusion Matrix": [
+                        [
+                            81.5,
+                            18.5
+                        ],
+                        [
+                            16.25,
+                            83.75
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "k": 5,
+            "negative_data": "random",
+            "results": {
+                "cv_mean": 0.8705099040544724,
+                "Negatives from experiments": {
+                    "Accuracy": 0.53375,
+                    "Precision": 0.5568570676493815,
+                    "Recall": 0.53375,
+                    "F1-score": 0.48102091395278057,
+                    "AUC-ROC": 0.578225,
+                    "Confusion Matrix": [
+                        [
+                            21.5,
+                            78.5
+                        ],
+                        [
+                            14.75,
+                            85.25
+                        ]
+                    ]
+                },
+                "Random Negatives": {
+                    "cv_mean": 0.8705099040544724,
+                    "Accuracy": 0.84375,
+                    "Precision": 0.8438553056873669,
+                    "Recall": 0.84375,
+                    "F1-score": 0.8437380361933962,
+                    "AUC-ROC": 0.92465625,
+                    "Confusion Matrix": [
+                        [
+                            83.5,
+                            16.5
+                        ],
+                        [
+                            14.75,
+                            85.25
+                        ]
+                    ]
+                }
+            }
+        }
+    ]
+}
